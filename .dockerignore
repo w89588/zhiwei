@@ -1,0 +1,13 @@
+*
+!requirements-server.txt
+!requirements-server-lock.txt
+!server_main.py
+!VERSION
+!backend/
+!backend/*.py
+!backend/static/
+!backend/static/*
+!backend/static/**
+!helper/
+!helper/__init__.py
+!helper/exporting.py

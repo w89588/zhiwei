@@ -1,0 +1,31 @@
+微信对话工作台 / WechatHelper
+
+This project is an independently implemented local WeChat record browser and AI assistant.
+
+Runtime Config.Cipher scanning structure, offsets and XOR mask are adapted from:
+https://github.com/TANGandXUE/wcdb-key-tool
+Copyright (c) 2025 CloudDreamAI / TANGandXUE
+MIT License. See LICENSE-wcdb-key-tool.txt.
+
+SQLCipher page layout, local message schema and image decoding format reference:
+https://github.com/328336690/wechat-decrypt
+Copyright (c) 2026 328336690
+MIT License. See LICENSE-wechat-decrypt.txt.
+
+Product interaction inspiration:
+https://github.com/jev-chat/jev-chat-jarvis
+https://github.com/jev-chat/jev-chat-windows
+No Jev source code, brand assets or proprietary Jev model are included.
+
+Third-party runtime packages: FastAPI (MIT), Uvicorn (BSD), HTTPX (BSD),
+PyCryptodome (BSD/public domain), python-zstandard (BSD), psutil (BSD),
+pywebview (BSD), pythonnet (MIT), PyInstaller (GPL with bootloader exception).
+Their license notices are retained in package distributions/metadata.
+
+The server Markdown workspace bundles Marked and DOMPurify locally.
+Pinned versions, npm integrity values and upstream repositories are recorded in
+backend/static/vendor/provenance.json; their licenses are included alongside.
+
+Additional media packages: silk-python (BSD-3-Clause), pypdf (BSD-3-Clause),
+imageio-ffmpeg (BSD-2-Clause); bundled FFmpeg has its own license and notices
+in the distribution. Image key derivation references https://github.com/ylytdeng/wechat-decrypt.

@@ -1,0 +1,37 @@
+WechatHelper / 微信解析客户端
+
+Windows 10 version 1903 or newer, Windows 11, x64.
+Microsoft Edge WebView2 Runtime is required. It is normally present on
+Windows 11; install the Evergreen Runtime from Microsoft if it is absent:
+https://developer.microsoft.com/microsoft-edge/webview2/
+
+The application reads chat databases already saved on your own computer.
+Python is bundled. WeChat, Ollama, model weights, API keys and personal chat
+records are not included in this installer.
+
+Version 2.0 separates this Windows client from the optional memory server.
+Create a client in your server console, register with appKey / appSecret,
+and authorize the WeChat accounts and conversations you want to upload.
+Credentials use Windows DPAPI; uploads and stored records are encrypted.
+The server can decrypt authorized records for searches and model requests.
+
+All AI providers and models are configured by the user. The platform has
+no bundled or default model. Once a server conversation is monitored and
+a model is configured, periodic Markdown memories and evidence are saved
+automatically without a confirmation step. Using a remote model sends
+authorized chat context to the provider you configure.
+
+This compact client provides connection setup, collection statistics,
+MCP configuration copying, and startup preferences. Search, memories and
+AI configuration are managed on the server.
+
+The first installation enables Start with Windows by default; you may
+uncheck it during setup or change it later in Software Settings.
+Startup launches quietly in the system tray. Closing the fixed-size
+window keeps collection running; choose Exit from the tray to stop it.
+Updates preserve the in-app startup choice. Uninstall removes the
+application's startup entry.
+
+Installation is per-user and does not require administrator access.
+Uninstall removes the program and its shortcuts. Personal settings and
+chat caches in %LOCALAPPDATA%\Zhiwei remain on the computer.

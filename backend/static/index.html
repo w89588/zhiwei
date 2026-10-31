@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>微信对话工作台 · 服务端管理</title>
+  <link rel="stylesheet" href="./console/style.css">
+  <script src="./console/app.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">跳到主要内容</a>
+  <section id="login" class="login-screen" aria-labelledby="loginTitle">
+    <div class="login-brand"><span class="brand-mark" data-icon="chat"></span><span>对话工作台 <small>SERVER</small></span></div>
+    <div class="login-card">
+      <span class="eyebrow">YOUR CONVERSATIONS, CONNECTED</span>
+      <h1 id="loginTitle">对话的另一端，<br>也有一个工作台。</h1>
+      <p class="login-description">在服务端查看已上传的会话和聊天记录，<br>为外部 AI 提供持续可用的对话上下文。</p>
+      <form id="loginForm">
+        <label for="accessToken">读取 token</label>
+        <div class="password-field"><input id="accessToken" type="password" autocomplete="off" spellcheck="false" required placeholder="输入服务端的 read_token"><button id="toggleToken" type="button" aria-label="显示读取 token" aria-pressed="false" data-icon="eye"></button></div>
+        <p class="field-hint">使用部署时生成的读取凭据，上传 token 无法登录。</p>
+        <button id="loginButton" class="primary full" type="submit">进入管理台 <span data-icon="arrow"></span></button>
+        <p id="loginError" class="form-error" role="alert"></p>
+      </form>
+      <div class="login-note"><span data-icon="shield"></span><span>凭据仅在当前页面内存中使用，刷新或退出后需要重新登录。</span></div>
+    </div>
+    <p class="login-footer">微信在客户端解析 · 对话在服务端保存</p>
+  </section>
+
+  <div id="workspace" class="workspace" hidden>
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark" data-icon="chat"></span><span>对话工作台<small>服务端管理</small></span></div>
+      <div class="nav-caption">工作空间</div>
+      <nav aria-label="主导航">
+        <button data-page="overview" class="nav-item selected" aria-current="page"><span data-icon="grid"></span>服务总览</button>
+        <button data-page="conversations" class="nav-item"><span data-icon="chat"></span>会话与记录</button>
+        <button data-page="integration" class="nav-item"><span data-icon="plug"></span>连接与 AI 接入</button>
+      </nav>
+      <div class="sidebar-bottom"><span class="service-badge" id="serviceBadge"><i></i><span id="serviceLabel">服务运行中</span></span><p>独立保存，随时可读。<br>客户端离线后仍可查看已上传记录。</p><span class="version">WECHAT HELPER / SERVER</span></div>
+    </aside>
+    <div class="main-shell">
+      <header class="topbar"><div class="breadcrumb">工作空间<span>/</span><strong id="pageCrumb">服务总览</strong></div><div class="account-menu"><span class="account-avatar" data-icon="user"></span><span id="accountName">—</span><span class="readonly">只读访问</span><button id="logout" class="quiet">退出</button></div></header>
+      <main id="main" tabindex="-1">
+        <div id="pageError" class="page-error" role="alert" hidden></div>
+        <section id="overviewPage" class="page" aria-labelledby="overviewTitle">
+          <div class="page-heading"><div><span class="eyebrow">SERVER OVERVIEW</span><h1 id="overviewTitle">服务总览</h1><p>每一段已上传的对话，都在这里妥善保存。</p></div><div class="heading-actions"><label class="auto-refresh"><input id="autoRefresh" type="checkbox" checked>自动刷新</label><button id="refreshOverview"><span data-icon="refresh"></span>刷新</button></div></div>
+          <div class="metrics">
+            <article class="metric"><div class="metric-top"><span>工作台会话</span><span class="metric-icon" data-icon="chat"></span></div><strong id="sessionMetric">—</strong><small>当前可供查看与 AI 读取的会话</small></article>
+            <article class="metric"><div class="metric-top"><span>已保存消息</span><span class="metric-icon" data-icon="database"></span></div><strong id="messageMetric">—</strong><small id="messageRange">等待客户端上传</small></article>
+            <article class="metric"><div class="metric-top"><span>最近同步</span><span class="metric-icon" data-icon="sync"></span></div><strong id="syncMetric" class="time-metric">—</strong><small id="syncDetail">尚未接收到上传</small></article>
+          </div>
+          <div class="overview-grid">
+            <section class="panel recent-panel"><div class="section-heading"><div><h2>最近的会话</h2><p>从已同步的对话继续了解上下文。</p></div><button class="text-button" data-goto="conversations">查看全部<span data-icon="arrow"></span></button></div><div id="recentSessions" class="recent-list"></div></section>
+            <section class="panel flow-panel"><span class="eyebrow">ONE CONTINUOUS WORKSPACE</span><h2>连接两端，保留上下文</h2><div class="flow-step"><span class="flow-icon" data-icon="monitor"></span><div><h3>Windows 客户端</h3><p>本机解析，按选择上传会话</p></div></div><div class="flow-line"></div><div class="flow-step"><span class="flow-icon active" data-icon="database"></span><div><h3>当前服务端</h3><p id="storageState">SQLite 持久化存储</p></div></div><div class="flow-line"></div><div class="flow-step"><span class="flow-icon" data-icon="plug"></span><div><h3>外部 AI</h3><p>通过 MCP 按权限读取上下文</p></div></div><button class="wide-link" data-goto="integration">查看连接方式<span data-icon="arrow"></span></button></section>
+          </div>
+          <section id="onboarding" class="onboarding" hidden><span class="onboarding-icon" data-icon="spark"></span><div><h2>等待第一段对话</h2><p>在 Windows 客户端添加会话，然后在“本机连接 → 服务端存储与同步”中开启上传。同步成功后，这里会显示你的记录。</p></div><button data-goto="integration">连接客户端<span data-icon="arrow"></span></button></section>
+          <p id="checkedAt" class="checked-at"></p>
+        </section>
+
+        <section id="conversationsPage" class="page conversation-page" aria-labelledby="conversationsTitle" hidden>
+          <div class="page-heading"><div><span class="eyebrow">CONVERSATIONS</span><h1 id="conversationsTitle">会话与记录</h1><p>查看服务端已经保存的历史，按关键词与日期找到依据。</p></div><button id="refreshConversations"><span data-icon="refresh"></span>刷新记录</button></div>
+          <div class="conversation-layout">
+            <section class="panel session-panel" aria-label="会话列表"><form id="sessionSearchForm" class="session-search"><label for="sessionSearch" class="sr-only">搜索会话名称、ID 或备注</label><span data-icon="search"></span><input id="sessionSearch" type="search" placeholder="搜索会话或备注"></form><div class="list-caption">工作台会话<span id="sessionTotal">0</span></div><div id="sessionList" class="session-list"></div><button id="moreSessions" class="load-more" hidden>加载更多会话</button></section>
+            <section class="panel chat-panel" aria-label="聊天记录"><div id="chatEmpty" class="chat-empty"><span data-icon="chat"></span><h2>从一段对话开始</h2><p>选择左侧会话，查看已上传的消息和背景。</p></div><div id="chatContent" class="chat-content" hidden>
+              <div class="chat-header"><div><h2 id="chatName"></h2><p id="chatId"></p></div><button id="exportMessages"><span data-icon="download"></span>导出已显示记录</button></div>
+              <form id="messageSearchForm" class="message-filters"><label class="search-field"><span class="sr-only">搜索当前会话消息</span><span data-icon="search"></span><input id="messageSearch" type="search" placeholder="搜索这段对话"></label><label class="date-field">从<input id="dateStart" type="date"></label><label class="date-field">至<input id="dateEnd" type="date"></label><button class="primary" type="submit">筛选</button><button id="resetMessages" class="quiet" type="button">重置</button></form>
+              <details class="context-details" id="contextDetails"><summary>备注与会话背景</summary><div id="chatContext"></div></details>
+              <div id="messageArea" class="message-area"><button id="olderMessages" class="load-more" hidden>加载更早的记录</button><div id="messageList"></div></div><footer class="chat-footer"><span id="messageCount"></span><span>时间：北京时间</span></footer>
+            </div></section>
+          </div>
+        </section>
+
+        <section id="integrationPage" class="page" aria-labelledby="integrationTitle" hidden>
+          <div class="page-heading"><div><span class="eyebrow">CONNECTIONS</span><h1 id="integrationTitle">连接与 AI 接入</h1><p>让客户端上传记录，让外部 AI 带着上下文工作。</p></div><span class="connection-pill"><i></i>服务端已连接</span></div>
+          <div class="connection-grid">
+            <section class="panel connection-card"><span class="step-label">01 / UPLOAD</span><h2>连接 Windows 客户端</h2><p>在客户端“本机连接 → 服务端存储与同步”中填写下方地址，并使用部署时的上传 token。</p><label for="serverUrl">服务端地址</label><div class="copy-field"><input id="serverUrl" readonly><button id="copyServerUrl" aria-label="复制服务端地址" data-icon="copy"></button></div><div class="tip"><span data-icon="shield"></span><p>上传 token 与读取 token 各司其职。上传仅在客户端显式开启后运行。</p></div><ol class="setup-steps"><li>连接微信，添加需要保存的会话。</li><li>填写服务端地址和上传 token，保存并测试。</li><li>开启自动上传，或点击“立即增量同步”。</li></ol></section>
+            <section class="panel connection-card"><span class="step-label">02 / READ</span><h2>连接外部 AI</h2><p>使用支持 Streamable HTTP 的 MCP 客户端，填入以下地址和读取凭据。</p><label for="mcpUrl">MCP 地址</label><div class="copy-field"><input id="mcpUrl" readonly><button id="copyMcpUrl" aria-label="复制 MCP 地址" data-icon="copy"></button></div><div class="config-heading"><h3>MCP 配置</h3><button id="copyMcpConfig" class="text-button"><span data-icon="copy"></span>复制配置</button></div><pre id="mcpConfig" class="code-block"></pre><label class="token-choice"><input id="includeToken" type="checkbox">配置中包含本次登录的读取 token</label><p class="field-hint">含凭据的配置仅交给你信任的 AI 客户端。</p></section>
+          </div>
+          <section class="panel tools-panel"><div class="section-heading"><div><h2>六个只读工具</h2><p>外部 AI 仅能读取当前凭据所属账号的工作台数据。</p></div><span class="readonly">READ ONLY</span></div><div class="tools-grid"><div><code>wechat_status</code><p>检查数据同步状态</p></div><div><code>list_sessions</code><p>查找工作台内的会话</p></div><div><code>read_messages</code><p>分页读取历史消息</p></div><div><code>search_messages</code><p>按关键词检索聊天依据</p></div><div><code>get_chat_context</code><p>查看备注、背景与知识</p></div><div><code>export_chat</code><p>返回 JSON 或 Markdown 记录</p></div></div></section>
+        </section>
+      </main>
+      <footer class="app-footer"><span>对话工作台 · 服务端</span><span>只读管理 · 会话选择与上传由客户端控制</span></footer>
+    </div>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>

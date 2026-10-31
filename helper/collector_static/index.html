@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>微信解析客户端</title>
+  <link rel="icon" href="/static/app.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/collector.css">
+  <script>window.HELPER_TOKEN='__TOKEN__';</script>
+  <script type="module" src="/static/collector.js"></script>
+</head>
+<body>
+<svg class="symbols" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="m10 13 4-4m-6 7-1 1a4 4 0 0 1-6-6l4-4a4 4 0 0 1 6 0m2 1 1-1a4 4 0 0 1 6 6l-4 4a4 4 0 0 1-6 0" transform="translate(1 0)"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24"><path d="m7 6-5 6 5 6m10-12 5 6-5 6m-3-15-4 18"/></symbol>
+  <symbol id="i-settings" viewBox="0 0 24 24"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3"/><circle cx="15" cy="17" r="3"/></symbol>
+  <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 3h7v7m0-7L10 14M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V3m-5 5 5-5 5 5M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="m12 2 8 3v6c0 5-4 8-8 11-4-3-8-6-8-11V5Z"/><path d="m8 12 3 3 5-6"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 10a8 8 0 1 0-2 8m3-15v7h-7"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6"/></symbol>
+</defs></svg>
+<div class="app-shell">
+  <header class="titlebar">
+    <div class="titlebar-drag-region pywebview-drag-region"><div class="brand"><img src="/static/app.svg" width="28" height="28" alt=""><strong>微信解析客户端</strong><span class="version">1.0.0</span></div></div>
+    <div class="window-controls" id="window-controls" hidden>
+      <button class="icon-button" id="minimize-window" aria-label="最小化窗口" title="最小化"><svg class="icon"><use href="#i-minus"/></svg></button>
+      <button class="icon-button close-button" id="hide-window" aria-label="收起到系统托盘" title="收起到系统托盘"><svg class="icon"><use href="#i-close"/></svg></button>
+    </div>
+    <span class="preview-label" id="preview-label">浏览器预览</span>
+  </header>
+  <div class="workspace">
+    <aside class="sidebar">
+      <div class="nav-label">工作空间</div>
+      <nav aria-label="主要导航">
+        <button data-page="overview" class="active" aria-current="page"><svg class="icon"><use href="#i-grid"/></svg>运行概览</button>
+        <button data-page="settings"><svg class="icon"><use href="#i-link"/></svg>连接设置</button>
+        <button data-page="mcp"><svg class="icon"><use href="#i-code"/></svg>MCP 接入</button>
+      </nav>
+      <div class="sidebar-bottom"><button data-page="preferences"><svg class="icon"><use href="#i-settings"/></svg>软件设置</button><div class="sidebar-note"><svg class="icon"><use href="#i-shield"/></svg><span>本地解析 · 加密上传</span></div></div>
+    </aside>
+    <main id="main-content">
+      <div class="page-heading"><div><h1 id="page-title">运行概览</h1><p id="page-subtitle">连接状态与本次运行统计</p></div><button class="secondary small" id="open-server" disabled>打开服务端<svg class="icon"><use href="#i-external"/></svg></button></div>
+      <section id="page-overview" class="page" aria-labelledby="page-title">
+        <div class="status-card"><div class="status-emblem"><svg class="icon"><use href="#i-shield"/></svg></div><div class="status-copy"><div class="status-heading"><h2 id="headline">正在检查运行状态</h2><span id="overall" class="badge">检查中</span></div><p id="headline-detail">连接服务端后，自动加载微信解析器。</p></div></div>
+        <div class="metrics">
+          <article class="metric"><div class="metric-label"><span>已上传消息</span><svg class="icon"><use href="#i-upload"/></svg></div><strong><span id="changed">0</span><small>条</small></strong><p>服务端确认新增或更新</p></article>
+          <article class="metric"><div class="metric-label"><span>本次运行时长</span><svg class="icon"><use href="#i-clock"/></svg></div><strong id="uptime">0<small>小时</small>00<small>分</small></strong><p>自本次启动开始统计</p></article>
+        </div>
+        <div class="panel connection-panel"><div class="panel-heading"><h2>同步链路</h2><button id="overview-settings" class="text-button">管理连接<svg class="icon"><use href="#i-arrow"/></svg></button></div>
+          <div class="step"><span class="step-number">01</span><div class="step-copy"><strong>服务端连接</strong><p id="server-state">等待检查</p></div><span id="server-badge" class="badge">等待</span></div>
+          <div class="step"><span class="step-number">02</span><div class="step-copy"><strong>本地微信解析器</strong><p id="parser-state">等待服务端连接</p></div><span id="parser-badge" class="badge">等待</span></div>
+          <div class="step"><span class="step-number">03</span><div class="step-copy"><strong>加密传输</strong><p id="sync-state">等待解析器加载</p><p id="priority-state">重点同步状态等待检查</p></div><span id="sync-badge" class="badge">等待</span></div>
+          <div class="panel-foot"><span>最近同步成功</span><time id="last-success">尚未同步</time></div>
+        </div>
+
+      </section>
+      <section id="page-settings" class="page" hidden aria-labelledby="page-title">
+        <div class="panel"><div class="panel-heading"><h2>服务端凭据</h2><span class="label-tag">支持 HTTP / HTTPS</span></div>
+          <form id="settings-form" novalidate>
+            <div id="settings-error" class="error-summary" role="alert" tabindex="-1" hidden></div>
+            <label for="url">服务端地址</label><input id="url" type="url" required placeholder="https://your-server.example.com" autocomplete="url" aria-describedby="url-error"><span class="field-error" id="url-error"></span>
+            <p class="hint">局域网可使用 HTTP，例如 http://192.168.1.10:8787。HTTP 连接不会加密凭据，请在可信网络中使用。</p>
+            <div class="field-row"><div class="field"><label for="app-key">appKey</label><input id="app-key" required autocomplete="off" spellcheck="false" placeholder="app_…" aria-describedby="app-key-error"><span class="field-error" id="app-key-error"></span></div><div class="field"><label for="app-secret">appSecret</label><input id="app-secret" type="password" autocomplete="off" spellcheck="false" placeholder="输入客户端密钥" aria-describedby="app-secret-error"><span class="field-error" id="app-secret-error"></span></div></div>
+            <label class="consent"><input id="consent" type="checkbox" required aria-describedby="consent-error"><span>授权加密上传所选账号的群聊及通讯录好友消息，不含陌生人私聊、公众号和系统推送。首次同步可能包含历史消息。</span></label><span class="field-error" id="consent-error"></span>
+            <div class="form-actions"><span class="hint">凭据加密保存在当前 Windows 用户下</span><button class="primary" id="save-settings" type="submit">检测连接并保存</button></div>
+          </form>
+        </div>
+        <div class="panel"><div class="panel-heading"><h2>微信账号</h2><button id="refresh-accounts" class="text-button"><svg class="icon"><use href="#i-refresh"/></svg>刷新</button></div><div class="account-row"><label class="sr-only" for="account-select">本机微信账号</label><select id="account-select"><option value="">尚未发现账号</option></select><button id="choose-account" class="secondary" disabled>连接账号</button></div><p class="hint" id="account-hint">完成服务端连接后检测账号。</p><p class="field-error" id="account-error" role="alert" tabindex="-1"></p></div>
+      </section>
+      <section id="page-mcp" class="page" hidden aria-labelledby="page-title">
+        <div class="panel"><div class="panel-heading"><h2>让 AI 访问微信记忆</h2><span class="label-tag">由服务端提供</span></div><ol class="instructions"><li>在服务端「MCP 接入」创建 Key 并设置授权范围。</li><li>将 Key 粘贴到下方，复制配置到支持 MCP 的 AI 软件。</li></ol><div class="field"><label for="mcp-key">MCP Key</label><input id="mcp-key" type="password" autocomplete="off" spellcheck="false" placeholder="粘贴只读或全部权限 Key" aria-describedby="mcp-hint"></div><p class="hint" id="mcp-hint">只读 Key 可检索消息；全部权限 Key 还可写入。Key 仅留在当前页面。</p></div>
+        <div class="panel code-panel"><div class="panel-heading"><label for="mcp-config">配置预览</label><span class="code-label">JSON</span></div><textarea id="mcp-config" readonly spellcheck="false" placeholder="连接服务端并填入 Key 后，在此生成配置。"></textarea><div class="code-footer"><span class="hint" id="mcp-state">请先完成服务端连接</span><button class="primary" id="copy-mcp" disabled><svg class="icon"><use href="#i-copy"/></svg>复制配置</button></div></div>
+      </section>
+      <section id="page-preferences" class="page" hidden aria-labelledby="page-title">
+        <div class="panel"><div class="panel-heading"><h2>图片解密</h2></div><p class="hint">登录微信并打开一张图片后，点击提取。密钥仅加密保存在本机，暂不可用的图片会自动重试。</p><button id="extract-image-key" class="secondary">提取图片密钥</button></div>
+        <div class="panel"><div class="panel-heading"><h2>启动与后台运行</h2></div><div class="preference-row"><div><label for="autostart">开机自动启动</label><p class="hint" id="autostart-hint">请在桌面客户端中设置</p></div><label class="switch"><input id="autostart" type="checkbox" role="switch" aria-describedby="autostart-hint" disabled><span aria-hidden="true"></span></label></div><p class="field-error" id="preferences-error" role="alert"></p><div class="preference-row"><div><strong>关闭窗口时</strong><p class="hint">收起到系统托盘，继续解析和同步。</p></div><span class="label-tag">后台运行</span></div><div class="preference-row"><div><strong>窗口布局</strong><p class="hint">固定尺寸，不可拖动、缩放或最大化。</p></div><span class="label-tag">840 × 640</span></div></div>
+        <div class="panel"><div class="about"><img src="/static/app.svg" width="42" height="42" alt=""><div><h2>微信解析客户端</h2><p class="hint">版本 1.0.0 · 本地采集助手</p></div></div><p class="hint">专注本地微信解析与加密同步。消息检索、记忆与访问权限请在服务端管理。</p><div class="about-footer"><span class="hint" id="tray-status">桌面版支持系统托盘</span><button id="quit-app" class="secondary danger-text" disabled>退出客户端</button></div></div>
+      </section>
+    </main>
+  </div>
+  <footer class="statusbar"><span id="footer-status"><i class="status-dot" aria-hidden="true"></i><span id="footer-state">正在检查</span></span><span id="footer-host">尚未配置服务端</span></footer>
+</div>
+<div id="notice" class="toast" role="status" aria-live="polite" hidden><span id="notice-text"></span><button class="icon-button" id="dismiss-notice" aria-label="关闭提示"><svg class="icon"><use href="#i-close"/></svg></button></div>
+</body>
+</html>
